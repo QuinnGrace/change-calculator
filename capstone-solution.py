@@ -1,8 +1,22 @@
 import numpy as np
 import cv2
 
-def nothing(x):
-    pass
+def av_pix(img,circles,size):
+    av_value = []
+    for coords in circles[0,:]:
+        col = np.mean(img[coords[1]-size:coords[1]+size,coords[0]-size:coords[0]+size])
+        #print(img[coords[1]-size:coords[1]+size,coords[0]-size:coords[0]+size])
+        av_value.append(col)
+    return av_value 
+
+def get_radius(circles):
+    radius = []
+    for coords in circles[0,:]:
+        radius.append(coords[2])    
+    return radius
+
+#def nothing(x):
+#    pass
 
 #trackbars (for testing purposes only)
 #cv2.namedWindow("Trackbar")
@@ -53,10 +67,48 @@ while True:
         cv2.circle(original_image,(i[0],i[1]),i[2],(0,255,0),2)
         # draw the center of the circle
         cv2.circle(original_image,(i[0],i[1]),2,(0,0,255),3)
-        cv2.putText(original_image, str(count),(i[0],i[1]), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 2)
+        #cv2.putText(original_image, str(count),(i[0],i[1]), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 2)
         count += 1
+
+    #find and show radii
+    radii = get_radius(circles)
+    print(radii)
+
+    #calc and print brightness
+    bright_values = av_pix(img,circles,20)
+    print(bright_values)
+
+    #sort coins into denominations    
+    values = []
+    for a,b in zip(bright_values,radii):
+        if a > 150 or b <= 32:
+            values.append(0.1)
+        elif a > 150 or b <= 36:
+            values.append(0.2)
+        elif a > 150 or b <= 37:
+            values.append(1)
+        elif a < 50 or a > 90 and b < 44:
+            values.append(0.5)
+        elif a > 40 and b <= 44:
+            values.append(2)
+        elif a > 150 or b > 44:
+            values.append(5)
+                   
+    print(values)           
+    count_2 = 0
+    cv2.putText(original_image, 'ESTIMATED TOTAL VALUE: R' + str(sum(values)), (200,100), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0,55,0))
+    for i in circles[0,:]:
+        
+        if values[count_2] >= 1:
+            cv2.putText(original_image, "R" + str(values[count_2]), (i[0],i[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+        else:
+            values[count_2] = values[count_2] * 100
+            cv2.putText(original_image, str(values[count_2]) + "c", (i[0],i[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)    
+        count_2 += 1
+   
+
 
     #show images
     cv2.imshow('Detected Coins', original_image)
     cv2.waitKey(0)
-    #cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
