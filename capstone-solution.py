@@ -5,7 +5,6 @@ def av_pix(img,circles,size):
     av_value = []
     for coords in circles[0,:]:
         col = np.mean(img[coords[1]-size:coords[1]+size,coords[0]-size:coords[0]+size])
-        #print(img[coords[1]-size:coords[1]+size,coords[0]-size:coords[0]+size])
         av_value.append(col)
     return av_value 
 
@@ -67,7 +66,6 @@ while True:
         cv2.circle(original_image,(i[0],i[1]),i[2],(0,255,0),2)
         # draw the center of the circle
         cv2.circle(original_image,(i[0],i[1]),2,(0,0,255),3)
-        #cv2.putText(original_image, str(count),(i[0],i[1]), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 2)
         count += 1
 
     #find and show radii
