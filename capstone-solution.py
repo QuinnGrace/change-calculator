@@ -21,8 +21,8 @@ def get_radius(circles):
 #cv2.namedWindow("Trackbar")
 #cv2.createTrackbar("dp", "Trackbar", 1, 10, nothing)
 #cv2.createTrackbar("minDist", "Trackbar",10, 200, nothing)
-#cv2.createTrackbar("param1", "Trackbar", 0, 255, nothing)
-#cv2.createTrackbar("param2", "Trackbar", 0, 255, nothing)
+#cv2.createTrackbar("param1", "Trackbar", 10, 255, nothing)
+#cv2.createTrackbar("param2", "Trackbar", 10, 255, nothing)
 #cv2.createTrackbar("minRadius", "Trackbar", 20, 255, nothing)
 #cv2.createTrackbar("maxRadius", "Trackbar", 20, 255, nothing)
 
